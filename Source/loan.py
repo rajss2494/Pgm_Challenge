@@ -13,7 +13,7 @@ class LoanSchema(Schema):
     )
     term = fields.Integer(
         required=True,
-        validate=lambda x: 0 <= x <= 360,
+        validate=lambda x: 1 <= x <= 360,
         error_messages={"validator_failed": "term must be between " "1 and 360 months"},
     )
     rate = fields.Float(
@@ -63,9 +63,7 @@ class FixedTermLoan(Loan):
         )
 
     def __repr__(self):
-        return (
-            f"FixedTermLoan('{self.principal}', " f"'{self.term}', " f"'{self.rate}') "
-        )
+        return f"FixedTermLoan('{self.principal}', " f"'{self.term}', '{self.rate}')"
 
     # assuming term is provided in months, rate in percentage points
     def monthly_payment(self) -> float:
@@ -111,6 +109,8 @@ class FixedTermLoan(Loan):
         return schedule
 
     def balance_at(self, month) -> float:
+        if month < 1 or month > self.term:
+            raise ValueError(f"month input must be between 1 and {self.term}")
         schedule = self.amortization_schedule()
         return schedule[month - 1]["balance"]
 
