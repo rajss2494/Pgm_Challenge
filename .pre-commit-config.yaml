@@ -1,0 +1,12 @@
+repos:
+  - repo: https://github.com/psf/black
+    rev: 23.1.0  # Use the latest stable version
+    hooks:
+      - id: black
+        language_version: python3
+        fail_fast : true  # stop pre-commit hooks if black fails
+
+  - repo: https://github.com/PyCQA/flake8
+    rev: 6.0.0  # Use the latest stable version
+    hooks:
+      - id: flake8
