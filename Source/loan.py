@@ -26,7 +26,6 @@ class LoanSchema(Schema):
 
 
 class Loan(ABC):
-
     def __init__(self, principal, term, rate):
         schema = LoanSchema()
         try:
@@ -82,7 +81,6 @@ class FixedTermLoan(Loan):
         monthly_payment = self.monthly_payment()
         mon_rate = self.rate / 12
         for month in range(1, self.term + 1):
-
             int_pay_monthly = math.floor((balance * mon_rate) * 100) / 100
             princ_pay_monthly = (
                 math.floor((monthly_payment - int_pay_monthly) * 100) / 100
@@ -113,6 +111,20 @@ class FixedTermLoan(Loan):
             raise ValueError(f"month input must be between 1 and {self.term}")
         schedule = self.amortization_schedule()
         return schedule[month - 1]["balance"]
+
+
+class Floating_Rate_Loan(Loan):
+    def __init__(self):
+        pass
+
+    def monthly_payment(self):
+        pass
+
+    def amortization_schedule(self):
+        pass
+
+    def balance_at(self, month):
+        pass
 
 
 if __name__ == "__main__":
