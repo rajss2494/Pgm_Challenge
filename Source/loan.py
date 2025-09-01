@@ -26,7 +26,7 @@ class LoanSchema(Schema):
 
 
 class Loan(ABC):
-    def __init__(self, principal, term, rate):
+    def __init__(self, principal: float, term: int, rate: float) -> None:
         schema = LoanSchema()
         try:
             validated_data = schema.load(
@@ -39,29 +39,29 @@ class Loan(ABC):
             raise ValueError(f"Invalid loan parameters : {e.messages}")
 
     @abstractmethod
-    def monthly_payment(self):
+    def monthly_payment(self) -> float:
         pass
 
     @abstractmethod
-    def amortization_schedule(self):
+    def amortization_schedule(self) -> list:
         pass
 
     @abstractmethod
-    def balance_at(self, month):
+    def balance_at(self, month: int) -> float:
         pass
 
 
 class FixedTermLoan(Loan):
-    def __init__(self, principal, term, rate):
+    def __init__(self, principal: float, term: int, rate: float) -> None:
         super().__init__(principal, term, rate)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"the loan paremeters are principal={self.principal}, "
             f"term={self.term}, rate={self.rate}"
         )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"FixedTermLoan('{self.principal}', " f"'{self.term}', '{self.rate}')"
 
     # assuming term is provided in months, rate in percentage points
@@ -106,7 +106,7 @@ class FixedTermLoan(Loan):
 
         return schedule
 
-    def balance_at(self, month) -> float:
+    def balance_at(self, month: int) -> float:
         if month < 1 or month > self.term:
             raise ValueError(f"month input must be between 1 and {self.term}")
         schedule = self.amortization_schedule()
@@ -114,17 +114,17 @@ class FixedTermLoan(Loan):
 
 
 class Floating_Rate_Loan(Loan):
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
-    def monthly_payment(self):
-        pass
+    def monthly_payment(self) -> float:
+        raise NotImplementedError
 
-    def amortization_schedule(self):
-        pass
+    def amortization_schedule(self) -> list:
+        raise NotImplementedError
 
-    def balance_at(self, month):
-        pass
+    def balance_at(self, month: int) -> float:
+        raise NotImplementedError
 
 
 if __name__ == "__main__":
