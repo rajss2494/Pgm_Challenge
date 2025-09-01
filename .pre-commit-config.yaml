@@ -1,12 +1,25 @@
 repos:
+  # --- Formatting ---
   - repo: https://github.com/psf/black
-    rev: 23.1.0  # Use the latest stable version
+    rev: 23.1.0   # same as before
     hooks:
       - id: black
         language_version: python3
-        fail_fast : true  # stop pre-commit hooks if black fails
+        fail_fast: true
 
+  # --- Linting (flake8 + annotations plugin) ---
   - repo: https://github.com/PyCQA/flake8
-    rev: 6.0.0  # Use the latest stable version
+    rev: 6.0.0    # same as before
     hooks:
       - id: flake8
+        additional_dependencies:
+          - flake8-annotations==3.0.1   # choose a stable plugin version
+
+  # --- Static typing ---
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.5.1   # safe older version that works with Python 3.8–3.11
+    hooks:
+      - id: mypy
+        pass_filenames: false
+        args: [--config-file=mypy.ini, Source]
+        exclude: ^(\.venv|Test|External Libraries)/
